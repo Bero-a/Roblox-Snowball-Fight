@@ -48,7 +48,7 @@ Client와 마찬가지로 Components와 Services를 불러오는 역할을 함
 
 `src\shared\Constants.lua`
 
-눈덩이 피해량, 라운드 시간 등 고정값들을 보관함
+눈덩이 피해량, 라운드 시간 등 고정된 상수값들을 보관함
 
 ## 세부 사항
 
