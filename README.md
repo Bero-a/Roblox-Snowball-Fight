@@ -4,9 +4,11 @@
 wally install
 ```
 
+bash에서
+
 ## 스크립트별 간단한 설명
 
-### Client-Side
+### Client-side
 
 `src\client\Components\ClientSnowballer.lua`
 
@@ -14,7 +16,21 @@ wally install
 
 `src\client\Controllers\GameStateController.lua`
 
-게임의 상태와 관련된 GUI
+남은 시간, 플레이어 대기 등 게임의 상태와 관련된 GUI를 담당함
+
+`src\client\init.client.lua`
+
+위의 Componnents와 Controllers를 불러오는 역할을 함
+
+### Server-side
+
+`src\server\Components\Snowballer.lua`
+
+플레이어 손에 눈덩이 모델 붙이기, 눈덩이에 맞은 플레이어에게 피해 입히기 등 눈덩이와 관련된, 서버에서 해야 하는 역할을 함 
+
+`src\server\Services\DataService.lua`
+
+
 
 `src/shared/Constandts.lua`
 
