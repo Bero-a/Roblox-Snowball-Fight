@@ -6,7 +6,7 @@ wally install
 
 ## 스크립트별 간단한 설명
 
-### Client-Sside
+### Client-Side
 
 `src\client\Components\ClientSnowballer.lua`
 
