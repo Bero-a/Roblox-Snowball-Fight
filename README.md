@@ -42,12 +42,17 @@ bash에서
 
 `src\server\init.server.lua`
 
+Client와 마찬가지로 Components와 Services를 불러오는 역할을 함
 
+### ReplicatedStorage
 
-`src/shared/Constandts.lua`
+`src\shared\Constants.lua`
 
+눈덩이 피해량, 라운드 시간 등 고정값들을 보관함
 
-눈덩이 피해량, 라운드 시간 등 고정값들
+## 세부 사항
 
-`src/server/DataService.lua`
+**components 모듈의 문제**
+components 버전 2.1.0(원본 플레이스에 사용)에서는 서버, 클라이언트에서 한 번씩 Components를 지나감(즉, ClientSnowballer.lua의 Snowballer:Start()가 실행됨)
 
+components 버전 2.4.6(직접 패키지 다운로드 시)에서는 서버에서만 지나감(ClientSnowballer의 메서드가 실행되지 않음, 눈덩이 던지는 동작이 마우스 클릭과 연결되지 않음)
