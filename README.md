@@ -30,9 +30,22 @@ bash에서
 
 `src\server\Services\DataService.lua`
 
+플레이어의 전적, 즉 킬 수를 저장하고 불러오며 적을 처치할 떄마다 추가해주는 역할
+
+`src\server\Services\RoundService.lua`
+
+팀을 만들거나, 게임을 시작하거나, 죽은 플레이어를 관전으로 만들거나 하는 등 전체적인 게임 상태 관리
+
+`src\server\Services\SnowballerService.lua`
+
+플레이어 접속 시 항상 눈덩이를 던질 수 있게 해줌
+
+`src\server\init.server.lua`
+
 
 
 `src/shared/Constandts.lua`
+
 
 눈덩이 피해량, 라운드 시간 등 고정값들
 
