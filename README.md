@@ -57,3 +57,14 @@ Client와 마찬가지로 Components와 Services를 불러오는 역할을 함
 components 버전 2.1.0(원본 플레이스에 사용)에서는 서버, 클라이언트에서 한 번씩 Components를 지나감(즉, ClientSnowballer.lua의 Snowballer:Start()가 실행됨)
 
 components 버전 2.4.6(직접 패키지 다운로드 시)에서는 서버에서만 지나감(ClientSnowballer의 메서드가 실행되지 않음, 눈덩이 던지는 동작이 마우스 클릭과 연결되지 않음)
+
+components 패키지의 문제로 보임
+
+Snowballer라는 같은 이름의 Component를 ClientSnowballer.lua(클라이언트)와 Snowballer.lua(서버)에서 다르게 사용해서
+
+위 요약에 적힌 대로 파일 내용이 들어있고, 함수 이름과 주석으로 참고할 수 있음
+
+커스텀할 만한 것들
+최대 충전 시간, 재사용 대기시간, 경기 시간, 눈덩이 피해량 모두 Constants.lua에 있음
+
+기존 스크립트들은 온갖 패키지를 활용해서 만들었으며 원본 맵에 맞춰져 있기 때문에 눈덩이에 관련되지 않은 무언가를 추가하고자 한다면 새로운 스크립트를 작성하는 것도 방법
