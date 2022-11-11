@@ -4,6 +4,7 @@ local packages = game:GetService("ReplicatedStorage").Packages
 local Knit = require(packages.Knit)
 local Loader = require(packages.Loader)
 
+---- 하위 컴포넌트랑 서비스 로드
 Knit.AddServices(script.Services)
 
 Knit.Start():andThen(function()

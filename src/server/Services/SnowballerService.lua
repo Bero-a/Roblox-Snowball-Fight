@@ -11,6 +11,7 @@ local Knit = require(packages.Knit)
 ]]
 local SnowballerService = Knit.CreateService { Name = "SnowballerService" }
 
+-- 플레이어 참가 시 Snowballer로 등록
 function SnowballerService:KnitStart()
 	-- Handles every single case for the player to always get their baller
 	local function onCharacterAdded(character)

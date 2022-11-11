@@ -11,6 +11,7 @@ local Timer = require(packages.Timer)
 local court = workspace.Court
 local Constants = require(ReplicatedStorage.Common.Constants)
 
+-- 라운드 관련 서비스 생성
 local RoundService = Knit.CreateService {
 	Name = "RoundService",
 	Client = {
@@ -22,7 +23,9 @@ local RoundService = Knit.CreateService {
 	_trove = Trove.new()
 }
 
+-- 라운드 관련 체계 시작
 function RoundService:KnitStart()
+	-- 모든 플레이어를 죽여서 리셋
 	local function resetPlayers()
 		for _, team in ipairs(Teams:GetTeams()) do
 			for _, player in ipairs(team:GetPlayers()) do
@@ -47,6 +50,7 @@ function RoundService:KnitStart()
 	end)
 end
 
+-- 플레이어 대기 시 
 function RoundService:_waitForPlayers()
 	self.Client.GameState:Set({
 		State = "Waiting for Players...",
@@ -54,10 +58,10 @@ function RoundService:_waitForPlayers()
 	})
 	local enoughPlayers = Signal.new()
 	local count = 0
-	local function updateCount()
+	local function updateCount() -- 인원 충족 시 시작
 		count = #Players:GetPlayers()
 		if count > 1 
-		--	or RunService:IsStudio() 
+		--	or RunService:IsStudio() -- 스튜디오 테스트용
 		then
 			enoughPlayers:Fire()
 		end
@@ -68,6 +72,7 @@ function RoundService:_waitForPlayers()
 	enoughPlayers:Wait()
 end
 
+-- 경기 시작 전 대기시간 설정
 function RoundService:_intermission()
 	for i = Constants.INTERMISSION_TIME, 0, -1 do
 		self.Client.GameState:Set({
@@ -78,12 +83,14 @@ function RoundService:_intermission()
 	end
 end
 
+-- 경기 시작
 function RoundService:_begin()
 	self:_generateTeams()
 	self:_teleportTeam(Teams.Red)
 	self:_teleportTeam(Teams.Blue)
 end
 
+-- 팀 생성
 function RoundService:_generateTeams()
 	local players = Players:GetPlayers()
 	-- Not sure if the shuffle is necessary, but I think it'll be fine
@@ -97,6 +104,7 @@ function RoundService:_generateTeams()
 	end
 end
 
+-- 사망 시 관전
 function RoundService:_watchPlayer(player)
 	local humanoid = player.Character:FindFirstChild("Humanoid")
 	if not humanoid then
@@ -110,6 +118,7 @@ function RoundService:_watchPlayer(player)
 	end)
 end
 
+--각 팀마다 팀 지역 근처에서 무작위 장소로 이동
 function RoundService:_teleportTeam(team)
 	local function teleportPlayer(player, pos)
 		local character = player.Character
@@ -134,6 +143,7 @@ function RoundService:_teleportTeam(team)
 	end
 end
 
+-- 경기 시간이 다 될 때까지 남은 시간과 팀별 인원수 표시
 function RoundService:_yieldUntilFinished()
 	for i = Constants.ROUND_TIME, 0, -1 do
 		self.Client.GameState:Set({
@@ -150,6 +160,7 @@ function RoundService:_yieldUntilFinished()
 	end
 end
 
+-- 경기가 끝났을 때 승자 표시, 인원 수가 같을 경우 타이브레이크
 function RoundService:_end()
 	local numRed = #Teams.Red:GetPlayers()
 	local numBlue = #Teams.Blue:GetPlayers()

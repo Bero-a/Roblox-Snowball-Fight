@@ -11,6 +11,7 @@ local KillsData = DataStoreService:GetOrderedDataStore("Kills")
 local sessionData = {}
 local DataService = Knit.CreateService { Name = "DataService" }
 
+-- 리더보드 초기 설정
 local function LeaderboardSetup(kills)
 	local leaderstats = Instance.new("Folder")
 	leaderstats.Name = "leaderstats"	
@@ -23,6 +24,7 @@ local function LeaderboardSetup(kills)
 	return leaderstats
 end
 
+-- 전적 데이터 불러오기
 local function LoadData(player)
 	local success, result = pcall(function()
 		return KillsData:GetAsync(player.UserId)
@@ -33,6 +35,7 @@ local function LoadData(player)
 	return success, result
 end
 
+-- 전적 데이터 저장하기
 local function SaveData(player, data)
 	local success, result = pcall(function()
 		KillsData:SetAsync(player.UserId, data)
@@ -43,27 +46,31 @@ local function SaveData(player, data)
 	return success
 end
 
+-- 전적 관련 체계 시작
 function DataService:KnitStart()
+	-- 플레이어 참가 시 데이터 불러오기
 	local function onPlayerAdded(player)
 		local success, data = LoadData(player)
 		-- Currently only support saving kills
-		sessionData[player.UserId] = { Kills = if success and data ~= nil then data else 0 }
+		sessionData[player.UserId] = { Kills = if success and data ~= nil then data else 0 } -- 데이터 없을 시 초기 설정
 		local leaderstats = LeaderboardSetup(sessionData[player.UserId].Kills)
 		leaderstats.Parent = player
 	end
 
+	-- 플레이어 퇴장 시 데이터 저장하기
 	local function onPlayerRemoving(player)
 		-- Only supports saving kills
 		SaveData(player, sessionData[player.UserId].Kills)
 		sessionData[player.UserId] = nil
 	end
 
+	-- 게임이 종료될 때(플레이어가 없어 서버가 닫힐 때)
 	local function onClose()
 		if RunService:IsStudio() then
 			return
 		end
 
-		for _, player in pairs(Players:GetPlayers()) do
+		for _, player in pairs(Players:GetPlayers()) do -- 스튜디오가 아니여서 플레이어가 여러 명일 경우
 			task.spawn(onPlayerRemoving(player))
 		end
 	end

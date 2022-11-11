@@ -1,3 +1,4 @@
+-- 고정 상수 값들 모음
 return {
 	MAX_THROW_TIME = 0.5,
 	COOLDOWN = 0.1,

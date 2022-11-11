@@ -16,6 +16,7 @@ local THROW_SPEED = 750
 
 local throwCheck = t.tuple(t.Vector3, t.numberMax(Constants.MAX_THROW_TIME))
 
+-- Workspace에서 마우스 포인터가 향하는 방향
 local function newCastParams(character)
 	local params = RaycastParams.new()
 	params.FilterDescendantsInstances = { character, wall }
@@ -23,6 +24,7 @@ local function newCastParams(character)
 	return params
 end
 
+-- 위 값을 활용한 눈덩이 궤적에 물리량 반영
 local function newThrowBehavior(castParams, provider)
 	local behavior = FastCast.newBehavior()
 	behavior.Acceleration = Vector3.FromAxis(Enum.Axis.Y) * -workspace.Gravity
@@ -31,10 +33,12 @@ local function newThrowBehavior(castParams, provider)
 	return behavior
 end
 
+-- 패키지 빌드업
 local Snowballer = Component.new({
 	Tag = "Snowballer",
 })
 
+-- 눈덩이 관련 체계 생성
 function Snowballer:Construct()
 	self._trove = Trove.new()
 	self._player = Players:GetPlayerFromCharacter(self.Instance)
@@ -49,6 +53,7 @@ function Snowballer:Construct()
 	self._playerBall = self._trove:Add(playerSnowball:Clone())
 end
 
+-- 눈덩이 관련 체계 시작
 function Snowballer:Start()
 	self:_attachBallToPlayer()
 	self:_handleLengthChanged()
@@ -57,6 +62,7 @@ function Snowballer:Start()
 
 end
 
+-- 게임 시작 시 눈덩이를 플레이어 손에 붙임
 function Snowballer:_attachBallToPlayer()
 	-- the instance is the player character
 	local grip = self.Instance:FindFirstChild("RightGripAttachment", true)
@@ -66,6 +72,7 @@ function Snowballer:_attachBallToPlayer()
 	end
 end
 
+-- 눈덩이를 맞혔을 때 관련
 function Snowballer:_handleRayHit()
 	self._trove:Connect(self._caster.RayHit, function(cast, result, velocity, ball)
 		-- particles!
@@ -81,13 +88,14 @@ function Snowballer:_handleRayHit()
 				and self._player.Team ~= player.Team  -- targeting an enemy, not teammate
 				and player.Neutral == false -- target player is actually in the game
 			then
-				local humanoid = character:FindFirstChild("Humanoid")
+				-- 위에서 가려낸 대상에게 피해 주기
+				local humanoid = character:FindFirstChild("Humanoid") 
 				if humanoid then
 					humanoid:TakeDamage(Constants.SNOWBALL_DAMAGE)
 					-- Let the client know to play a sound
 					local killed = humanoid.Health <= 0
 					if killed then
-						Knit.GetService("DataService"):AddKill(self._player)
+						Knit.GetService("DataService"):AddKill(self._player) -- 처치 시 전적에 반영
 					end
 					self._hitSignal:Fire(self._player, killed)
 				end
@@ -96,6 +104,7 @@ function Snowballer:_handleRayHit()
 	end)
 end
 
+-- 눈덩이를 던졌을 때 궤적 표시
 function Snowballer:_handleCastTerminating()
 	self._trove:Connect(self._caster.CastTerminating, function(cast)
 		local ball = cast.RayInfo.CosmeticBulletObject
@@ -108,6 +117,7 @@ function Snowballer:_handleCastTerminating()
 	end)
 end
 
+-- 손에서 날아가는 Ray에 계속 눈덩이를 이동시킴
 function Snowballer:_handleLengthChanged()
 	self._trove:Connect(self._caster.LengthChanged, function(cast, lastPoint, dir, displacement, velocity, ball)
 		-- Ugly, but there is no way to do it one time when the caster spawns it in
@@ -116,13 +126,16 @@ function Snowballer:_handleLengthChanged()
 	end)
 end
 
+-- 눈덩이 던지기
 function Snowballer:Throw(player, mousePos, throwTime)
 	assert(throwCheck(mousePos, throwTime))
 	if player ~= self._player or self._canThrow:Get() == false then
 		return 
 	end
-	self:_setThrowable(false)
+	self:_setThrowable(false) -- 눈덩이를 던질 수 없는 상태로 만듦
 
+	-- 손에서 눈덩이가 발사되도록 하기 위해 플레이어 기준이 아닌
+	-- 월드 기준에서의 눈덩이 위치 획득
 	local pos do
 		pos = player.Character:GetPrimaryPartCFrame().Position
 		local grip = player.Character:FindFirstChild("RightGripAttachment", true)
@@ -142,16 +155,19 @@ function Snowballer:Throw(player, mousePos, throwTime)
 		ball.Trail.Enabled = true
 	end
 
+	-- 재사용 대기시간 후에 눈덩이를 다시 던질 수 있도록 설정
 	task.delay(Constants.COOLDOWN, function()
 		self:_setThrowable(true)
 	end)
 end
 
+-- 던질 수 있는지 여부에 따라 플레이어 손의 눈덩이 투명도 설정(던질 수 있으면 표시, 아니면 숨기기)
 function Snowballer:_setThrowable(canThrow)
 	self._canThrow:Set(canThrow)
 	self._playerBall.Transparency = if canThrow then 0 else 1
 end
 
+-- 눈덩이 관련 체계 파괴
 function Snowballer:Stop()
 	self._trove:Destroy()
 end

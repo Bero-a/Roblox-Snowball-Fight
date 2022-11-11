@@ -18,6 +18,7 @@ local hitSound = ReplicatedStorage.Hit
 local killSound = ReplicatedStorage.Kill
 local wall = workspace.Lobby.Wall
 
+-- Workspace에서 마우스 포인터가 향하는 방향
 local params = RaycastParams.new()
 params.FilterType = Enum.RaycastFilterType.Blacklist
 local function getMousePos()
@@ -41,11 +42,13 @@ function OnlyLocalPlayer.ShouldConstruct(component)
 	return component.Instance == char
 end
 
+-- 패키지 빌드업
 local Snowballer = Component.new({
 	Tag = "Snowballer",
 	Extensions = { OnlyLocalPlayer }
 })
 
+-- 눈덩이 관련 체계 생성
 function Snowballer:Construct()
 	self._trove = Trove.new()
 	self._powerGui = self._trove:Add(powerGui:Clone())
@@ -56,6 +59,7 @@ function Snowballer:Construct()
 	self.GUI_INFO = TweenInfo.new(Constants.MAX_THROW_TIME, Enum.EasingStyle.Linear)
 end
 
+-- 눈덩이 관련 체계 시작
 function Snowballer:Start()
 	local canThrow = self._comm:GetProperty("CanThrow")
 	local humanoid = self.Instance:WaitForChild("Humanoid")
@@ -77,6 +81,7 @@ function Snowballer:Start()
 	canThrow:Observe(function(value)
 		-- just so the client doesn't yell at you
 	end)
+	-- 눈덩이 던지는 액션
 	ContextActionService:BindAction("Throw", function(name, state, obj)
 		if state == Enum.UserInputState.Begin and canThrow:Get() == true then
 			winding = true
@@ -115,6 +120,7 @@ function Snowballer:Start()
 	end)
 end
 
+-- 눈덩이 던지기 시작할 떄 나오는 gui
 function Snowballer:_startGuiTween()
 	self._powerGui.Enabled = true
 	local bar = self._powerGui.Base.Bounds.Bar
@@ -129,6 +135,7 @@ function Snowballer:_windup()
 	
 end
 
+-- 도중에 던졌을 때 gui 지우기
 function Snowballer:_endGuiTween()
 	if self._guiTween then
 		self._guiTween:Cancel()
