@@ -62,10 +62,11 @@ Client와 마찬가지로 Components와 Services를 불러오는 역할을 함
 
 기존 스크립트들은 온갖 패키지를 활용해서 만들었으며 원본 맵에 맞춰져 있기 때문에 눈덩이에 관련되지 않은 무언가를 추가하고자 한다면 새로운 스크립트를 작성하는 것도 방법
 
-**components 모듈의 문제**
+**components 모듈**
 
 components 버전 2.1.0(원본 플레이스에 사용)에서는 서버, 클라이언트에서 한 번씩 Components를 지나감(즉, ClientSnowballer.lua의 Snowballer:Start()가 실행됨)
 
 components 버전 2.4.6(직접 패키지 다운로드 시)에서는 서버에서만 지나감(ClientSnowballer의 메서드가 실행되지 않음, 눈덩이 던지는 동작이 마우스 클릭과 연결되지 않음)
 
 components 패키지의 문제로 보임
+혹은 패키지의 작동 원리가 바뀐 것일 수도 있음
