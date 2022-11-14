@@ -1,10 +1,11 @@
 # Snowball-Fight
 
+git 설치
+로컬 저장소 폴더에서 우클릭 후 Git Bash Here 클릭
+
 ```bash
 wally install
 ```
-
-bash에서
 
 ## 스크립트별 간단한 설명
 
