@@ -61,7 +61,7 @@ function RoundService:_waitForPlayers()
 	local function updateCount() -- 인원 충족 시 시작
 		count = #Players:GetPlayers()
 		if count > 1 
-		--	or RunService:IsStudio() -- 스튜디오 테스트용
+			-- or RunService:IsStudio() -- 스튜디오 테스트용
 		then
 			enoughPlayers:Fire()
 		end
