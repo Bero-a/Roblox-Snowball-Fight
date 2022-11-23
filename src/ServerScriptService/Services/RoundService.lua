@@ -85,6 +85,7 @@ end
 
 -- 경기 시작
 function RoundService:_begin()
+	workspace.Lobby.Wall.CanColide = true
 	self:_generateTeams()
 	self:_teleportTeam(Teams.Red)
 	self:_teleportTeam(Teams.Blue)
@@ -173,6 +174,7 @@ function RoundService:_end()
 		task.wait(1)
 	end
 	self._trove:Clean()
+	workspace.Lobby.Wall.CanCollide = false
 end
 
 return RoundService

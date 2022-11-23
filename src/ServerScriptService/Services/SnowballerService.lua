@@ -17,13 +17,20 @@ function SnowballerService:KnitStart()
 	local function onCharacterAdded(character)
 		CollectionService:AddTag(character, "Snowballer")
 	end
-	local function onPlayerAdded(player)
+	
+	local function onCharacterRemoving(character)
+		CollectionService:RemoveTag(character, "Snowballer")
+	end
+	
+	local function onPlayerAdded(player: Player)
 		if player.Character then
 			onCharacterAdded(player.Character)
 		end
 		player.CharacterAdded:Connect(onCharacterAdded)
+		player.CharacterRemoving:Connect(onCharacterRemoving)
 	end
-
+	
+	
 	for _, player in ipairs(Players:GetPlayers()) do
 		task.defer(onPlayerAdded, player)
 	end
