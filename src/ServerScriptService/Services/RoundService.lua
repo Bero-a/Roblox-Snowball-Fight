@@ -2,6 +2,7 @@ local Players = game:GetService("Players")
 local Teams = game:GetService("Teams")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CollectionService = game:GetService("CollectionService")
 local packages = ReplicatedStorage.Packages
 local TableUtil = require(packages.TableUtil)
 local Knit = require(packages.Knit)
@@ -17,7 +18,7 @@ local RoundService = Knit.CreateService {
 	Client = {
 		GameState = Knit.CreateProperty({
 			State = "Waiting for Players",
-			TimeLeft = "",
+			TimeLeft = ""
 		})
 	},
 	_trove = Trove.new()
@@ -59,7 +60,13 @@ function RoundService:_waitForPlayers()
 	local enoughPlayers = Signal.new()
 	local count = 0
 	local function updateCount() -- 인원 충족 시 시작
-		count = #Players:GetPlayers()
+		local snowballers = {}
+		for i, player in ipairs(Players:GetPlayers()) do
+			if CollectionService:HasTag(player, "Snowballer") then
+				table.insert(snowballers, player.UserId)
+			end
+		end
+		count = #snowballers
 		if count > 1 
 			-- or RunService:IsStudio() -- 스튜디오 테스트용
 		then
@@ -77,7 +84,7 @@ function RoundService:_intermission()
 	for i = Constants.INTERMISSION_TIME, 0, -1 do
 		self.Client.GameState:Set({
 			State = "Intermission",
-			TimeLeft = i,
+			TimeLeft = i
 		})
 		task.wait(1)
 	end
@@ -149,7 +156,7 @@ function RoundService:_yieldUntilFinished()
 	for i = Constants.ROUND_TIME, 0, -1 do
 		self.Client.GameState:Set({
 			State = "Fight!",
-			TimeLeft = i,
+			TimeLeft = i
 		})
 		task.wait(1)
 		local numRed = #Teams.Red:GetPlayers()
