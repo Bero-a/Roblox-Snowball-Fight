@@ -151,10 +151,13 @@ end
 
 UserInputService.InputBegan:Connect(function(input, processed)
 	if processed then return end
+	local gameStateUI = player.PlayerGui:WaitForChild("GameState")
 	if input.KeyCode == Enum.KeyCode.N then
 		Knit.GetService("SnowballerService"):KeyPressed()
+		gameStateUI.Enabled = true
 	elseif input.KeyCode == Enum.KeyCode.M then
 		Knit.GetService("SnowballerService"):KeyPresseded()
+		gameStateUI.Enabled = false
 	end
 end)
 
