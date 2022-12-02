@@ -12,29 +12,35 @@ local Knit = require(packages.Knit)
 local SnowballerService = Knit.CreateService { Name = "SnowballerService" }
 
 -- 플레이어 참가 시 Snowballer로 등록
+
+local function onCharacterAdded(character)
+	CollectionService:AddTag(character, "Snowballer")
+end
+
+
+
+local function onPlayerAdded(player: Player)
+	if player.Character then
+		onCharacterAdded(player.Character)
+	end
+	player.CharacterAdded:Connect(onCharacterAdded)
+end
+
 function SnowballerService:KnitStart()
 	-- Handles every single case for the player to always get their baller
-	local function onCharacterAdded(character)
-		CollectionService:AddTag(character, "Snowballer")
-	end
 	
-	local function onCharacterRemoving(character)
-		CollectionService:RemoveTag(character, "Snowballer")
-	end
-	
-	local function onPlayerAdded(player: Player)
-		if player.Character then
-			onCharacterAdded(player.Character)
-		end
-		player.CharacterAdded:Connect(onCharacterAdded)
-		player.CharacterRemoving:Connect(onCharacterRemoving)
-	end
-	
-	
-	for _, player in ipairs(Players:GetPlayers()) do
-		task.defer(onPlayerAdded, player)
-	end
-	Players.PlayerAdded:Connect(onPlayerAdded)
+	-- for _, player in ipairs(Players:GetPlayers()) do
+	-- 	task.defer(onPlayerAdded, player)
+	-- end
+	-- Players.PlayerAdded:Connect(onPlayerAdded)
+end
+
+function SnowballerService.Client:KeyPressed(player)
+	onPlayerAdded(player)
+end
+
+function SnowballerService.Client:KeyPresseded(player)
+	CollectionService:RemoveTag(player.character, "Snowballer")
 end
 
 return SnowballerService
