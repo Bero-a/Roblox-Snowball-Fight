@@ -12,9 +12,15 @@ local sessionData = {}
 local DataService = Knit.CreateService { Name = "DataService" }
 
 -- 리더보드 초기 설정
-local function LeaderboardSetup(kills)
-	local leaderstats = Instance.new("Folder")
-	leaderstats.Name = "leaderstats"	
+local function LeaderboardSetup(kills, player)
+	local leaderstats
+	if player:FindFirstChild("leaderstats") then
+		leaderstats = player:FindFirstChild("leaderstats")
+	else
+		leaderstats = Instance.new("Folder")
+		leaderstats.Name = "leaderstats"	
+		leaderstats.Parent = player
+	end
 
 	local money = Instance.new("IntValue")
 	money.Name = "Kills"
@@ -53,8 +59,7 @@ function DataService:KnitStart()
 		local success, data = LoadData(player)
 		-- Currently only support saving kills
 		sessionData[player.UserId] = { Kills = if success and data ~= nil then data else 0 } -- 데이터 없을 시 초기 설정
-		local leaderstats = LeaderboardSetup(sessionData[player.UserId].Kills)
-		leaderstats.Parent = player
+		LeaderboardSetup(sessionData[player.UserId].Kills, player)
 	end
 
 	-- 플레이어 퇴장 시 데이터 저장하기
