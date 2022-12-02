@@ -6,6 +6,7 @@ local packages = game:GetService("ReplicatedStorage"):WaitForChild("Packages")
 local Component = require(packages.Component)
 local Comm = require(packages.Comm)
 local Trove = require(packages.Trove)
+local Knit = require(packages.Knit)
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 local TweenService = game:GetService("TweenService")
@@ -147,5 +148,14 @@ end
 function Snowballer:Stop()
 	self._trove:Destroy()
 end
+
+UserInputService.InputBegan:Connect(function(input, processed)
+	if processed then return end
+	if input.KeyCode == Enum.KeyCode.N then
+		Knit.GetService("SnowballerService"):KeyPressed()
+	elseif input.KeyCode == Enum.KeyCode.M then
+		Knit.GetService("SnowballerService"):KeyPresseded()
+	end
+end)
 
 return Snowballer
