@@ -39,7 +39,7 @@ function OnlyLocalPlayer.ShouldConstruct(component)
 	-- For some reason, we sometimes have to wait for the character to load in 
 	-- even though the tag is added after they load in on the server
 	-- task.wait(1) -- good ol wait to fix a bug!
-	local char = player.character or player.CharacterAdded:Wait()
+	local char = player.character or player.CharacterAppearanceLoaded:Wait()
 	return component.Instance == char
 end
 
