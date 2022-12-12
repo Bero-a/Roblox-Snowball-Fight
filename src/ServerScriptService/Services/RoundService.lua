@@ -12,6 +12,8 @@ local Timer = require(packages.Timer)
 local court = workspace.Court
 local Constants = require(ReplicatedStorage.Common.Constants)
 
+local EventConnected = false
+
 -- 라운드 관련 서비스 생성
 local RoundService = Knit.CreateService {
 	Name = "RoundService",
@@ -47,41 +49,47 @@ function RoundService:KnitStart()
 			self:_begin()
 			self:_yieldUntilFinished()
 			self:_end()
+			print("Ended!")
 		end
 	end)
 end
 
 -- 플레이어 대기 시 
 function RoundService:_waitForPlayers()
+	print("_waitForPlayers")
 	self.Client.GameState:Set({
 		State = "Waiting for Players...",
 		TimeLeft = ""
 	})
-	local enoughPlayers = Signal.new()
+	local enoughPlayers = false
 	local count = 0
 	local function updateCount() -- 인원 충족 시 시작
-		local snowballers = {}
-		for i, player in ipairs(Players:GetPlayers()) do
-			if CollectionService:HasTag(player, "Snowballer") then
-				table.insert(snowballers, player.UserId)
-			end
-		end
-		count = #snowballers
+		count = #CollectionService:GetTagged("Snowballer")
+		print(count)
 		if count > 1 
 			-- or RunService:IsStudio() -- 스튜디오 테스트용
 		then
-			enoughPlayers:Fire()
+			print("Fired")
+			enoughPlayers = true
+		else
+			enoughPlayers = false
 		end
 	end
-	Players.PlayerAdded:Connect(updateCount)
-	Players.PlayerRemoving:Connect(updateCount)
-	task.delay(1, updateCount) -- just so the event wait can actually detect it
-	enoughPlayers:Wait()
+	if not EventConnected then
+		CollectionService:GetInstanceAddedSignal("Snowballer"):Connect(updateCount)
+		CollectionService:GetInstanceRemovedSignal("Snowballer"):Connect(updateCount)
+		EventConnected = true
+	end
+	--task.delay(1, updateCount) -- just so the event wait can actually detect it
+	print("before wait")
+	repeat wait() until enoughPlayers
 end
 
 -- 경기 시작 전 대기시간 설정
 function RoundService:_intermission()
+	print("_intermission")
 	for i = Constants.INTERMISSION_TIME, 0, -1 do
+		if #CollectionService:GetTagged("Snowballer") == 1 then return end
 		self.Client.GameState:Set({
 			State = "Intermission",
 			TimeLeft = i
@@ -92,7 +100,9 @@ end
 
 -- 경기 시작
 function RoundService:_begin()
-	workspace.Lobby.Wall.CanColide = true
+	print("_begin")
+	if #CollectionService:GetTagged("Snowballer") == 1 then return end
+	workspace.Lobby.Wall.CanCollide = true
 	self:_generateTeams()
 	self:_teleportTeam(Teams.Red)
 	self:_teleportTeam(Teams.Blue)
@@ -100,7 +110,7 @@ end
 
 -- 팀 생성
 function RoundService:_generateTeams()
-	local players = Players:GetPlayers()
+	local players = CollectionService:GetTagged("Snowballer")
 	-- Not sure if the shuffle is necessary, but I think it'll be fine
 	for i, player in ipairs(TableUtil.Shuffle(players)) do
 		if not player.Character then
@@ -153,7 +163,9 @@ end
 
 -- 경기 시간이 다 될 때까지 남은 시간과 팀별 인원수 표시
 function RoundService:_yieldUntilFinished()
+	print("_yieldUntilFinished")
 	for i = Constants.ROUND_TIME, 0, -1 do
+		if #CollectionService:GetTagged("Snowballer") == 1 then return end
 		self.Client.GameState:Set({
 			State = "Fight!",
 			TimeLeft = i
@@ -170,6 +182,8 @@ end
 
 -- 경기가 끝났을 때 승자 표시, 인원 수가 같을 경우 타이브레이크
 function RoundService:_end()
+	print("_end")
+	if #CollectionService:GetTagged("Snowballer") == 1 then return end
 	local numRed = #Teams.Red:GetPlayers()
 	local numBlue = #Teams.Blue:GetPlayers()
 	local winner = if numBlue > numRed then Teams.Blue elseif numBlue == numRed then nil else Teams.Red
