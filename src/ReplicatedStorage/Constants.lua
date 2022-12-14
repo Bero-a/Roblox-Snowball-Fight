@@ -1,5 +1,6 @@
 -- 고정 상수 값들 모음
 return {
+	MIN_PLAYERS = 2,
 	MAX_THROW_TIME = 0.5,
 	COOLDOWN = 1,
 	INTERMISSION_TIME = 20, -- seconds
