@@ -17,7 +17,7 @@ local throwAnim = animations.Throw
 local windupAnim = animations.Windup
 local hitSound = ReplicatedStorage.Hit
 local killSound = ReplicatedStorage.Kill
-local wall = workspace.Lobby.Wall
+local wall = workspace.SnowballFight.Lobby.Wall
 
 -- Workspace에서 마우스 포인터가 향하는 방향
 local params = RaycastParams.new()
