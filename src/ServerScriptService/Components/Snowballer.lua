@@ -9,7 +9,7 @@ local Players = game:GetService("Players")
 local Constants = require(game:GetService("ReplicatedStorage").Common.Constants)
 local snowball = game:GetService("ServerStorage").Snowball
 local playerSnowball = game:GetService("ServerStorage").PlayerSnowball
-local wall = workspace.Lobby.Wall -- to keep players out, but snowballs can come
+local wall = workspace.SnowballFight.Lobby.Wall -- to keep players out, but snowballs can come
 
 local CACHE_SIZE = 25
 local THROW_SPEED = 750
@@ -48,7 +48,7 @@ function Snowballer:Construct()
 	self._canThrow = self._comm:CreateProperty("CanThrow", true)
 	self._caster = FastCast.new()
 	-- VERY IMPORTANT: If you set the parent of the cache to just workspace, it won't work! No clue why!
-	self._cache = self._trove:Add(FastCast.PartCache.new(snowball, CACHE_SIZE, workspace.Snowballs), "Dispose")
+	self._cache = self._trove:Add(FastCast.PartCache.new(snowball, CACHE_SIZE, workspace.SnowballFight.Snowballs), "Dispose")
 	self._behavior = newThrowBehavior(newCastParams(self.Instance), self._cache)
 	self._playerBall = self._trove:Add(playerSnowball:Clone())
 end
