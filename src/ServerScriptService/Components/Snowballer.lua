@@ -1,4 +1,4 @@
-local packages = game:GetService("ReplicatedStorage").Packages
+local packages = game:GetService("ReplicatedStorage").SnowballFight.Packages
 local Component = require(packages.Component)
 local Trove = require(packages.Trove)
 local FastCast = require(packages.FastCast)
@@ -6,9 +6,9 @@ local Comm = require(packages.Comm)
 local Knit = require(packages.Knit)
 local t = require(packages.t)
 local Players = game:GetService("Players")
-local Constants = require(game:GetService("ReplicatedStorage").Common.Constants)
-local snowball = game:GetService("ServerStorage").Snowball
-local playerSnowball = game:GetService("ServerStorage").PlayerSnowball
+local Constants = require(game:GetService("ReplicatedStorage").SnowballFight.Common.Constants)
+local snowball = game:GetService("ServerStorage").SnowballFight.Snowball
+local playerSnowball = game:GetService("ServerStorage").SnowballFight.PlayerSnowball
 local wall = workspace.SnowballFight.Lobby.Wall -- to keep players out, but snowballs can come
 
 local CACHE_SIZE = 25

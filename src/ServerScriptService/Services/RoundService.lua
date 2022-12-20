@@ -3,14 +3,14 @@ local Teams = game:GetService("Teams")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
-local packages = ReplicatedStorage.Packages
+local packages = ReplicatedStorage.SnowballFight.Packages
 local TableUtil = require(packages.TableUtil)
 local Knit = require(packages.Knit)
 local Trove = require(packages.Trove)
 local Signal = require(packages.Signal)
 local Timer = require(packages.Timer)
 local court = workspace.SnowballFight.Court
-local Constants = require(ReplicatedStorage.Common.Constants)
+local Constants = require(ReplicatedStorage.SnowballFight.Common.Constants)
 
 local EventConnected = false
 local enoughPlayers = false

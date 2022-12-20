@@ -4,24 +4,33 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "Common": {
-        "$path": "src/ReplicatedStorage"
-      },
-      "Packages": {
-        "$path": "Packages"
+      "SnowballFight": {
+        "$className": "Folder",
+        "Common": {
+          "$path": "src/ReplicatedStorage"
+        },
+        "Packages": {
+          "$path": "Packages"
+        }
       }
     },
 
     "ServerScriptService": {
-      "Server": {
-        "$path": "src/ServerScriptService"
+      "SnowballFight": {
+        "$className": "Folder",
+        "Server": {
+          "$path": "src/ServerScriptService"
+        }
       }
     },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "Client": {
-          "$path": "src/StarterPlayerScripts"
+        "SnowballFight": {
+          "$className": "Folder",
+          "Client": {
+            "$path": "src/StarterPlayerScripts"
+          }
         }
       }
     }

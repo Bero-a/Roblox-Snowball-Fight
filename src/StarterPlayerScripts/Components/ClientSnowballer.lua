@@ -2,7 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local ContextActionService = game:GetService("ContextActionService")
-local packages = game:GetService("ReplicatedStorage"):WaitForChild("Packages")
+local packages = game:GetService("ReplicatedStorage"):WaitForChild("SnowballFight"):WaitForChild("Packages")
 local Component = require(packages.Component)
 local Comm = require(packages.Comm)
 local Trove = require(packages.Trove)
@@ -10,13 +10,13 @@ local Knit = require(packages.Knit)
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 local TweenService = game:GetService("TweenService")
-local powerGui = game:GetService("ReplicatedStorage"):WaitForChild("ThrowPower")
-local Constants = require(game:GetService("ReplicatedStorage").Common.Constants)
-local animations = game:GetService("ReplicatedStorage").Animations
+local powerGui = game:GetService("ReplicatedStorage"):WaitForChild("SnowballFight"):WaitForChild("ThrowPower")
+local Constants = require(game:GetService("ReplicatedStorage").SnowballFight.Common.Constants)
+local animations = game:GetService("ReplicatedStorage").SnowballFight.Animations
 local throwAnim = animations.Throw
 local windupAnim = animations.Windup
-local hitSound = ReplicatedStorage.Hit
-local killSound = ReplicatedStorage.Kill
+local hitSound = ReplicatedStorage.SnowballFight.Hit
+local killSound = ReplicatedStorage.SnowballFight.Kill
 local wall = workspace.SnowballFight.Lobby.Wall
 
 -- Workspace에서 마우스 포인터가 향하는 방향
@@ -73,7 +73,7 @@ function Snowballer:Start()
 		return anim
 	end
 
-	self._powerGui.Parent = player.PlayerGui
+	self._powerGui.Parent = player.PlayerGui.SnowballFight
 
 	local windupRef = nil
 	local winding = false
@@ -151,7 +151,7 @@ end
 
 UserInputService.InputBegan:Connect(function(input, processed)
 	if processed then return end
-	local gameStateUI = player.PlayerGui:WaitForChild("GameState")
+	local gameStateUI = player.PlayerGui:WaitForChild("SnowballFight"):WaitForChild("GameState")
 	if input.KeyCode == Enum.KeyCode.N then
 		Knit.GetService("SnowballerService"):KeyPressed()
 		gameStateUI.Enabled = true

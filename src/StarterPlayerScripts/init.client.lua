@@ -1,4 +1,4 @@
-local packages = game:GetService("ReplicatedStorage"):WaitForChild("Packages")
+local packages = game:GetService("ReplicatedStorage"):WaitForChild("SnowballFight"):WaitForChild("Packages")
 local Knit = require(packages.Knit)
 local Loader = require(packages.Loader)
 

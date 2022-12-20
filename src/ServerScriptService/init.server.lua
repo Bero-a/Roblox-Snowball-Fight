@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 local CollectionService = game:GetService("CollectionService")
-local packages = game:GetService("ReplicatedStorage").Packages
+local packages = game:GetService("ReplicatedStorage").SnowballFight.Packages
 local Knit = require(packages.Knit)
 local Loader = require(packages.Loader)
 
